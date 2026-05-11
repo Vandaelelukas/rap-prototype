@@ -1,0 +1,7 @@
+openai
+chromadb
+llama-index
+llama-index-vector-stores-supabase
+python-dotenv
+streamlit
+vecs

@@ -1,0 +1,16 @@
+Proces: Assemblageorder vrijgeven in Business Central
+
+Een assemblageorder moet vrijgegeven worden voordat productie kan starten.
+Zonder vrijgave kunnen magazijnmedewerkers geen componenten picken.
+
+Stappen:
+1. Ga naar Magazijn > Assemblagebeheer > Assemblageorders
+2. Open de betreffende assemblageorder
+3. Controleer of alle componenten beschikbaar zijn in het magazijn
+4. Klik op Vrijgeven in de menubalk
+5. De status verandert van Open naar Vrijgegeven
+6. Magazijn ontvangt automatisch een picklijst
+
+Veelgemaakte fouten:
+- Order vrijgeven terwijl componenten nog niet op voorraad zijn
+- Verkeerde magazijnlocatie gekoppeld aan componenten

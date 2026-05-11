@@ -1,0 +1,18 @@
+Proces: Assemblageorder aanmaken in Business Central
+
+Een assemblageorder wordt aangemaakt wanneer een eindproduct samengesteld 
+moet worden uit meerdere componenten. 
+
+Stappen:
+1. Ga naar Magazijn > Assemblagebeheer > Assemblageorders
+2. Klik op Nieuw om een nieuwe order aan te maken
+3. Selecteer het eindartikel in het veld Artikelnummer
+4. Vul de gewenste hoeveelheid in
+5. Controleer of de componentenlijst correct is geladen
+6. Stel de verwachte einddatum in
+7. Klik op Vrijgeven om de order te activeren
+
+Veelgemaakte fouten:
+- Vergeten de order vrij te geven waardoor productie niet kan starten
+- Verkeerde hoeveelheid ingeven waardoor componenten tekort komen
+- Einddatum niet invullen waardoor planning niet werkt
