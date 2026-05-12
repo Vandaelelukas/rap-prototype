@@ -40,9 +40,10 @@ def laad_systeem():
         collection_name="documenten"
     )
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
-    documents = SimpleDirectoryReader(input_dir="documenten").load_data()
-    index = VectorStoreIndex.from_documents(
-        documents,
+    
+    # Gebruik bestaande index, geen nieuwe documenten inladen
+    index = VectorStoreIndex.from_vector_store(
+        vector_store=vector_store,
         storage_context=storage_context
     )
     return index.as_query_engine(text_qa_template=qa_prompt)
