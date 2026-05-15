@@ -1,0 +1,24 @@
+## Offerte details
+- **Leverancier:** Innomotics GmbH
+- **Klant:** Van Houcke NV, Vlamingveld 32, 8490 Jabbeke, België
+- **Referentienummer:** 5097042
+- **Datum:** 2.7.2024
+- **Geldigheid:** 6 maanden na datum van uitgifte
+
+## Producten / Onderdelen
+Omschrijving | Artikelnummer/MLFB | Prijs per stuk EUR | Levertijd  
+---|---|---|---
+Bearing on NDE 7306 BEP-2RZ-HT SKF for 1TZ9…-1B | 7306 BEP-2RZ-HT SKF | 22,92 | Ex works, na technische en commerciële afstemming  
+Bearing on NDE 7308 BECBJ SKF for 1TZ9…-1C    | 7308 BECBJ SKF        | 42,94 | Ex works, na technische en commerciële afstemming  
+Bearing on NDE 7309 BEGAP SKF for 1TZ9…-1D    | 7309 BEGAP SKF        | 46,86 | Ex works, na technische en commerciële afstemming  
+Bearing on NDE 7310 BEGAP SKF for 1TZ9…-1E    | 7310 BEGAP SKF        | 56,18 | Ex works, na technische en commerciële afstemming  
+Bearing on NDE 7312 BEGAP SKF for 1TZ9…-2A    | 7312 BEGAP SKF        | 59,87 | Ex works, na technische en commerciële afstemming  
+Bearing on NDE 7313 BEGAP SKF for 1TZ9…-2B    | 7313 BEGAP SKF        | 109,76 | Ex works, na technische en commerciële afstemming  
+
+## Commerciële voorwaarden
+- **Minimumbestelling:** 400 EUR
+- **Incoterms:** CIP Snellegem (Incoterms laatste geldende versie), inclusief verpakking, exclusief invoerrechten en overige kosten, op volle vrachtbasis
+- **Overige relevante voorwaarden:**  
+  - Leveringstermijnen zijn niet-bindend en afhankelijk van ononderbroken toeleveringsketen, productie en logistiek; gedeeltelijke levering is mogelijk.
+  - Prijzen in EUR.
+  - Producten worden gelabeld door Siemens of Innomotics als fabrikant.

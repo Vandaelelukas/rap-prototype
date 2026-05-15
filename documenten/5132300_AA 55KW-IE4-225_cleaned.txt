@@ -1,0 +1,21 @@
+## Offerte details
+- **Leverancier:** Innomotics GmbH
+- **Klant:** Van Houcke NV, Vlamingveld 32, 8490 Jabbeke, België
+- **Referentienummer:** 5132300
+- **Datum:** 12.5.2025
+- **Geldigheid:** 6 maanden na datum van uitgifte
+
+## Producten / Onderdelen
+
+Omschrijving | Artikelnummer/MLFB | Prijs per stuk EUR | Levertijd
+--- | --- | --- | ---
+SD Motor Type: 1CV4226B low-voltage motor, IEC draaistroomkooirotor, zelfgekoeld, IP55 temp. klasse 155(F) volgens 130(B), gietijzeren behuizing, Basic Line Super Premium Efficiency IE4, 4-polig, maat 225M, 55kW (50Hz)/63kW (60Hz), kleur RAL7030, IM B3, zonder motorbeveiliging, aansluitkast boven, met opties L19 (resmeerunit), L25 (versterkte lagers), M11 (RVS naamplaat) | 1TZ5504-2BB63-4AA4-Z (met opties: L19+L25+M11) | 2.749,65 EUR | ca. 20 werkdagen
+
+## Commerciële voorwaarden
+- **Minimumbestelling:** 1 stuk
+- **Incoterms:** CIP Snellegem (laatste versie Incoterms), incl. verpakking, excl. douane en overige kosten, op volle vrachtwagenbasis
+- **Overige relevante voorwaarden:**
+    - Prijzen in EUR.
+    - De levertermijn is onder voorbehoud van volledige technische en commerciële klaring, en van ononderbroken toeleveringsketen/logistiek.
+    - De offerte is slechts geldig indien referentienummer 5132300 bij de bestelling wordt vermeld op itemniveau.
+    - Deelleveringen mogelijk.

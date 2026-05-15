@@ -1,0 +1,66 @@
+# Inkoopproces in Business Central
+
+**Bron:** Impromptu Google Meet Meeting — 14 mei
+**Duur:** 6 min · [Bekijk opname](https://fathom.video/share/xM8FiuLkdS3C6GB5tLvrA7NRGi5QWMCe)
+**Spreker:** Lukas Vandaele (LeadLine)
+
+Een stap-voor-stap overzicht van hoe je een inkoop volledig doorloopt binnen Business Central, van het aanmaken van de inkooporder tot de geboekte inkoopfactuur.
+
+## De stappen
+
+**1. Inkooporder opzoeken**
+Zoek bovenaan in het zoekvenster naar *inkooporder*. Je komt dan op de lijst van bestaande inkooporders.
+
+**2. Nieuwe inkooporder aanmaken**
+Klik op *Nieuw* om een leeg inkooporder te openen.
+
+**3. Leverancier invullen**
+Vul de gegevens van de leverancier in. Zodra dit gebeurd is, wordt alle leveranciersinformatie automatisch overgenomen op het inkooporder.
+
+**4. Artikelen toevoegen**
+Voeg de artikelen toe die bij deze leverancier besteld moeten worden.
+
+**5. Aantallen definiëren**
+Geef per artikel op hoeveel je wil bestellen.
+
+**6. Prijs meegeven (indien nodig)**
+Vul waar nodig een *directe kostprijs exclusief btw* in.
+
+## Prijs toevoegen aan de inkoopprijslijst
+
+Je kan een prijs aanpassen en toevoegen aan de inkoopprijslijst rechtstreeks vanuit het inkooporder. Op de regels staat hiervoor het vinkje **Add New Price**, dat aangevinkt komt te staan zodra je een directe kostprijs exclusief btw hebt ingevuld.
+
+Op dat moment is de prijs nog niet toegevoegd aan de prijslijst. Dat kan op twee manieren:
+
+- **Knop *Adjust Purchase Prices*** indrukken.
+- **Het inkooporder vrijgeven** — let er hierbij wel op dat het vinkje *Add New Price* duidelijk aangevinkt staat.
+
+## Order vrijgeven en versturen
+
+**7. Leverancier op de hoogte brengen**
+Geef het order vrij. Breng vervolgens de leverancier op de hoogte via *Afdrukken en verzenden* → *Verzenden e-mail*.
+
+Het e-mailvenster opent met de e-mail en de pdf van het inkooporder als bijlage. Zodra de e-mail verzonden is, gaat de orderlijnstatus naar **Besteld**.
+
+## Bevestiging van de leverancier
+
+Je krijgt hoogstwaarschijnlijk een bevestiging terug van de leverancier. Vul de **toegezegde ontvangstdatum** in. Zodra die ingevuld is, verandert de orderlijnstatus naar **Bevestigd**.
+
+## Ontvangst boeken
+
+Navigeer naar **PGR Inkoop Globale Ontvangst** en selecteer de inkooporderregels die je wil ontvangen.
+
+Je kan kiezen voor een volledige of een deelontvangst, afhankelijk van het te ontvangen aantal:
+
+- Duid de regels aan en klik op **Boeken**.
+- Er wordt een pdf gedownload.
+
+Navigeer je terug naar het inkooporder, dan zie je dat de orderlijnstatus op **Ontvangen** staat en dat er enkel nog een *te factureren aantal* openstaat.
+
+## Factureren
+
+De leverancier moet nu nog zijn factuur sturen. Om af te ronden:
+
+1. Vul het **factuurnummer van de leverancier** in.
+2. Klik op **Boeken** → **Factureren**.
+3. Er wordt een **geboekte inkoopfactuur** aangemaakt.

@@ -1,0 +1,38 @@
+Hier volgt de extractie en structurering van de commercieel relevante informatie uit het bestand **5084129_AA_IPW56.pdf**:
+
+---
+
+## Offerte details
+- **Leverancier:** Innomotics (vermelding van Innomotics, s.r.o. & Innomotics GmbH)
+- **Klant:** Van Houcke NV, Vlamingveld 32, 8490 Jabbeke, België
+- **Referentienummer:** 5084129
+- **Datum:** 29-02-2024
+- **Geldigheid:** 6 maanden na datum van uitgifte
+
+---
+
+## Producten / Onderdelen
+
+| Omschrijving                | Artikelnummer/MLFB | Prijs per stuk EUR | Levertijd      |
+|-----------------------------|--------------------|--------------------|---------------|
+| Gamma ring + B1 NBR_1C      | Niet vermeld       | 22,00              | Ex works, bij volledige orderafstemming* |
+| Gamma ring + B1 NBR_1D      | Niet vermeld       | 25,96              | Ex works, bij volledige orderafstemming* |
+| Gamma ring + B1 NBR_1E      | Niet vermeld       | 27,70              | Ex works, bij volledige orderafstemming* |
+| Gamma ring + B1 NBR_2A      | Niet vermeld       | 27,70              | Ex works, bij volledige orderafstemming* |
+
+\* Let op: Levertermijn is pas bevestigd na technische en commerciële afstemming, onderhevig aan supply chain.
+
+---
+
+## Commerciële voorwaarden
+- **Minimumbestelling:** 400 EUR per offerte
+- **Incoterms:** CIP Snellegem (Incoterms laatste geldende versie), prijzen inclusief verpakking, exclusief douane of overige kosten, transport op volle vrachtwagenbasis
+- **Overige relevante voorwaarden:**
+  - Levering/uitvoering is niet bindend en afhankelijk van een ononderbroken supply chain, productie en logistiek (mogelijke vertragingen, recht op deelleveringen).
+  - Producten kunnen gelabeld zijn als Siemens of Innomotics.
+  - Klant mag de offerte niet overdragen zonder schriftelijke toestemming van Innomotics.
+  - Innomotics mag het aanbod overdragen of onderdelen ervan sub-contracteren aan gelieerde ondernemingen.
+
+---
+
+**Noot:** Alle juridische en export control boilerplate is verwijderd zoals gevraagd.
