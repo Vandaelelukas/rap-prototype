@@ -8,3 +8,6 @@ python-dotenv
 streamlit
 vecs
 langfuse
+openinference-instrumentation-llama-index
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http

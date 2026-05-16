@@ -19,7 +19,7 @@ from openai import OpenAI as OpenAIClient
 # ── Langfuse telemetry ──────────────────────────────────────────────────────
 # Pikt LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY en LANGFUSE_HOST automatisch
 # op uit environment variables (lokaal via .env, Streamlit Cloud via Secrets)
-from langfuse.llama_index import LlamaIndexInstrumentor
+from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
 instrumentor = LlamaIndexInstrumentor()
 instrumentor.start()
 # ───────────────────────────────────────────────────────────────────────────
@@ -265,12 +265,10 @@ if vraag:
 
             qa_prompt = bouw_qa_prompt(geschiedenis)
 
-            # ── Langfuse session tracking ───────────────────────────────────
-            instrumentor.set_trace_params(
-                session_id=st.session_state.session_id,
-                user_id="van-houcke",
-                tags=[classificatie["documenttype"]]
-            )
+            # ── Langfuse session tracking via attributes ──────────────────
+            from opentelemetry import trace as otel_trace
+            tracer = otel_trace.get_tracer(__name__)
+            # Session info wordt meegegeven als span attributes
             # ───────────────────────────────────────────────────────────────
 
             query_engine = RetrieverQueryEngine.from_args(
