@@ -60,7 +60,7 @@ for doc in documents:
     )
 
 print("\nChunken...")
-splitter = SentenceSplitter(chunk_size=512, chunk_overlap=50)
+splitter = SentenceSplitter(chunk_size=512, chunk_overlap=128)
 nodes = splitter.get_nodes_from_documents(documents)
 print(f"{len(nodes)} chunks aangemaakt")
 

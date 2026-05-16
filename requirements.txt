@@ -2,8 +2,9 @@ openai
 llama-index
 llama-index-vector-stores-supabase
 llama-index-retrievers-bm25
-rank-bm25
 llama-index-llms-openai
+rank-bm25
 python-dotenv
 streamlit
 vecs
+langfuse
