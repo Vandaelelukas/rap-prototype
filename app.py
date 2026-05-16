@@ -5,24 +5,7 @@ import pickle
 import streamlit as st
 from dotenv import load_dotenv
 
-# ── Arize Phoenix tracing ─────────────────────────────────────────────────────
-# Eenmalige initialisatie via module-level flag — voorkomt crash bij OAuth redirect
-from phoenix.otel import register
-from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
- 
-_phoenix_initialized = False
- 
-def init_phoenix():
-    global _phoenix_initialized
-    if not _phoenix_initialized:
-        try:
-            tracer_provider = register(project_name="van_houcke_rag")
-            LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
-        except Exception:
-            pass
-        _phoenix_initialized = True
- 
-init_phoenix()
+load_dotenv()
 
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core import PromptTemplate
@@ -37,8 +20,6 @@ from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI as LlamaOpenAI
 from openai import OpenAI as OpenAIClient
 
-load_dotenv()
-
 Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
 Settings.llm = LlamaOpenAI(model="gpt-4.1", temperature=0)
 
@@ -47,12 +28,23 @@ st.set_page_config(page_title="RAG Assistent", page_icon="🤖", layout="centere
 # ── Authenticatie ─────────────────────────────────────────────────────────────
 if not st.user.is_logged_in:
     st.title("📚 RAG Kennissysteem")
-    st.write("Meld je aan met je Van Houcke Microsoft account.")
+    st.write("Meld je aan met je Microsoft account.")
     if st.button("Aanmelden met Microsoft"):
         st.login("microsoft")
     st.stop()
- 
-# Uitlogknop in sidebar
+
+# ── Phoenix tracing — pas starten NA authenticatie ────────────────────────────
+if "phoenix_initialized" not in st.session_state:
+    try:
+        from phoenix.otel import register
+        from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+        tracer_provider = register(project_name="van_houcke_rag")
+        LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
+    except Exception:
+        pass
+    st.session_state.phoenix_initialized = True
+# ─────────────────────────────────────────────────────────────────────────────
+
 with st.sidebar:
     st.write(f"👤 {st.user.name}")
     st.write(f"✉️ {st.user.email}")
@@ -228,8 +220,6 @@ def bouw_retriever(index, nodes, classificatie: dict) -> QueryFusionRetriever:
                 if n.metadata.get("documenttype") == documenttype
             ]
 
-        # Laatste fallback: als nog steeds leeg, gebruik alle nodes
-        # (voorkomt crash bij lege nodes_cache of ontbrekende metadata)
         if not gefilterde_nodes:
             gefilterde_nodes = nodes
 
