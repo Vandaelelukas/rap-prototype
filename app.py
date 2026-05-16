@@ -1,9 +1,21 @@
 import os
 import json
+import uuid
 import pickle
 import streamlit as st
 from dotenv import load_dotenv
-from llama_index.core import VectorStoreIndex, StorageContext, CallbackManager
+
+# ── Arize Phoenix tracing ─────────────────────────────────────────────────────
+# Pikt PHOENIX_API_KEY en PHOENIX_COLLECTOR_ENDPOINT automatisch op
+# uit environment variables (lokaal via .env, Streamlit Cloud via Secrets)
+from phoenix.otel import register
+from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
+
+tracer_provider = register(project_name="van_houcke_rag")
+LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
+# ─────────────────────────────────────────────────────────────────────────────
+
+from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core import PromptTemplate
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.retrievers.bm25.base import BM25Retriever
@@ -15,12 +27,6 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI as LlamaOpenAI
 from openai import OpenAI as OpenAIClient
-
-# ── Langfuse telemetry ──────────────────────────────────────────────────────
-# Pikt LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY en LANGFUSE_HOST automatisch
-# op uit environment variables (lokaal via .env, Streamlit Cloud via Secrets)
-from langfuse.callback import CallbackHandler as LangfuseCallbackHandler
-# ───────────────────────────────────────────────────────────────────────────
 
 load_dotenv()
 
@@ -108,7 +114,6 @@ def classificeer_vraag(vraag: str) -> dict:
     except json.JSONDecodeError:
         resultaat = {}
 
-    # Veiligheidscheck
     if resultaat.get("documenttype") not in ["offerte", "bc_proces", "algemeen"]:
         resultaat["documenttype"] = "algemeen"
     if "leverancier" not in resultaat:
@@ -234,9 +239,7 @@ with st.spinner("Systeem laden..."):
 if "berichten" not in st.session_state:
     st.session_state.berichten = []
 
-# Unieke session ID per Streamlit sessie voor Langfuse session tracking
 if "session_id" not in st.session_state:
-    import uuid
     st.session_state.session_id = str(uuid.uuid4())
 
 for bericht in st.session_state.berichten:
@@ -262,19 +265,9 @@ if vraag:
             hybrid_retriever = bouw_retriever(index, nodes, classificatie)
 
             qa_prompt = bouw_qa_prompt(geschiedenis)
-
-            # ── Langfuse session tracking ───────────────────────────────────
-            langfuse_handler = LangfuseCallbackHandler(
-                session_id=st.session_state.session_id,
-                user_id="van-houcke",
-                tags=[classificatie["documenttype"]]
-            )
-            # ───────────────────────────────────────────────────────────────
-
             query_engine = RetrieverQueryEngine.from_args(
                 retriever=hybrid_retriever,
-                text_qa_template=qa_prompt,
-                callback_manager=CallbackManager([langfuse_handler])
+                text_qa_template=qa_prompt
             )
 
             antwoord = query_engine.query(standalone_vraag)

@@ -7,4 +7,5 @@ rank-bm25
 python-dotenv
 streamlit
 vecs
-langfuse
+arize-phoenix-otel
+openinference-instrumentation-llama-index
