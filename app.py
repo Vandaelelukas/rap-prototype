@@ -25,13 +25,61 @@ Settings.llm = LlamaOpenAI(model="gpt-4.1", temperature=0)
 
 st.set_page_config(page_title="RAG Assistent", page_icon="🤖", layout="centered")
 
-# ── Authenticatie ─────────────────────────────────────────────────────────────
-if not st.user.is_logged_in:
-    st.title("📚 RAG Kennissysteem")
-    st.write("Meld je aan met je Microsoft account.")
-    if st.button("Aanmelden met Microsoft"):
-        st.login("microsoft")
-    st.stop()
+# ── Authenticatie via MSAL ────────────────────────────────────────────────────
+import msal
+
+CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
+CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")
+TENANT_ID = os.getenv("AZURE_TENANT_ID")
+REDIRECT_URI = os.getenv("AZURE_REDIRECT_URI")
+AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
+SCOPES = ["User.Read"]
+
+
+def get_msal_app():
+    return msal.ConfidentialClientApplication(
+        CLIENT_ID,
+        authority=AUTHORITY,
+        client_credential=CLIENT_SECRET,
+    )
+
+
+# Check of we terug zijn van Microsoft met een auth code
+query_params = st.query_params
+auth_code = query_params.get("code")
+
+if "user" not in st.session_state:
+    if auth_code:
+        # We zijn net terug van Microsoft — wissel code in voor token
+        app = get_msal_app()
+        result = app.acquire_token_by_authorization_code(
+            auth_code,
+            scopes=SCOPES,
+            redirect_uri=REDIRECT_URI,
+        )
+        if "id_token_claims" in result:
+            claims = result["id_token_claims"]
+            st.session_state.user = {
+                "name": claims.get("name", "Onbekend"),
+                "email": claims.get("preferred_username", ""),
+            }
+            st.query_params.clear()
+            st.rerun()
+        else:
+            st.error(f"Login mislukt: {result.get('error_description', 'Onbekende fout')}")
+            st.stop()
+    else:
+        # Nog niet ingelogd — toon login knop
+        st.title("📚 RAG Kennissysteem")
+        st.write("Meld je aan met je Microsoft account.")
+        app = get_msal_app()
+        auth_url = app.get_authorization_request_url(
+            scopes=SCOPES,
+            redirect_uri=REDIRECT_URI,
+        )
+        st.link_button("Aanmelden met Microsoft", auth_url)
+        st.stop()
+# ─────────────────────────────────────────────────────────────────────────────
 
 # ── Phoenix tracing — pas starten NA authenticatie ────────────────────────────
 if "phoenix_initialized" not in st.session_state:
@@ -46,10 +94,11 @@ if "phoenix_initialized" not in st.session_state:
 # ─────────────────────────────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.write(f"👤 {st.user.name}")
-    st.write(f"✉️ {st.user.email}")
+    st.write(f"👤 {st.session_state.user['name']}")
+    st.write(f"✉️ {st.session_state.user['email']}")
     if st.button("Afmelden"):
-        st.logout()
+        del st.session_state.user
+        st.rerun()
 
 st.title("📚 RAG Kennissysteem")
 st.caption("Stel vragen over de beschikbare documentatie")
