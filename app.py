@@ -203,6 +203,11 @@ def bouw_retriever(index, nodes, classificatie: dict) -> QueryFusionRetriever:
                 if n.metadata.get("documenttype") == documenttype
             ]
 
+        # Laatste fallback: als nog steeds leeg, gebruik alle nodes
+        # (voorkomt crash bij lege nodes_cache of ontbrekende metadata)
+        if not gefilterde_nodes:
+            gefilterde_nodes = nodes
+
     else:
         vector_retriever = VectorIndexRetriever(index=index, similarity_top_k=5)
         gefilterde_nodes = nodes
