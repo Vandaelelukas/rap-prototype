@@ -6,14 +6,23 @@ import streamlit as st
 from dotenv import load_dotenv
 
 # ── Arize Phoenix tracing ─────────────────────────────────────────────────────
-# Pikt PHOENIX_API_KEY en PHOENIX_COLLECTOR_ENDPOINT automatisch op
-# uit environment variables (lokaal via .env, Streamlit Cloud via Secrets)
+# Eenmalige initialisatie via module-level flag — voorkomt crash bij OAuth redirect
 from phoenix.otel import register
 from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
-
-tracer_provider = register(project_name="van_houcke_rag")
-LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
-# ─────────────────────────────────────────────────────────────────────────────
+ 
+_phoenix_initialized = False
+ 
+def init_phoenix():
+    global _phoenix_initialized
+    if not _phoenix_initialized:
+        try:
+            tracer_provider = register(project_name="van_houcke_rag")
+            LlamaIndexInstrumentor().instrument(tracer_provider=tracer_provider)
+        except Exception:
+            pass
+        _phoenix_initialized = True
+ 
+init_phoenix()
 
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core import PromptTemplate
