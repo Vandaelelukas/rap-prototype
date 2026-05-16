@@ -3,7 +3,7 @@ import json
 import pickle
 import streamlit as st
 from dotenv import load_dotenv
-from llama_index.core import VectorStoreIndex, StorageContext
+from llama_index.core import VectorStoreIndex, StorageContext, CallbackManager
 from llama_index.core import PromptTemplate
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.retrievers.bm25.base import BM25Retriever
@@ -19,9 +19,7 @@ from openai import OpenAI as OpenAIClient
 # ── Langfuse telemetry ──────────────────────────────────────────────────────
 # Pikt LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY en LANGFUSE_HOST automatisch
 # op uit environment variables (lokaal via .env, Streamlit Cloud via Secrets)
-from openinference.instrumentation.llama_index import LlamaIndexInstrumentor
-instrumentor = LlamaIndexInstrumentor()
-instrumentor.start()
+from langfuse.callback import CallbackHandler as LangfuseCallbackHandler
 # ───────────────────────────────────────────────────────────────────────────
 
 load_dotenv()
@@ -265,15 +263,18 @@ if vraag:
 
             qa_prompt = bouw_qa_prompt(geschiedenis)
 
-            # ── Langfuse session tracking via attributes ──────────────────
-            from opentelemetry import trace as otel_trace
-            tracer = otel_trace.get_tracer(__name__)
-            # Session info wordt meegegeven als span attributes
+            # ── Langfuse session tracking ───────────────────────────────────
+            langfuse_handler = LangfuseCallbackHandler(
+                session_id=st.session_state.session_id,
+                user_id="van-houcke",
+                tags=[classificatie["documenttype"]]
+            )
             # ───────────────────────────────────────────────────────────────
 
             query_engine = RetrieverQueryEngine.from_args(
                 retriever=hybrid_retriever,
-                text_qa_template=qa_prompt
+                text_qa_template=qa_prompt,
+                callback_manager=CallbackManager([langfuse_handler])
             )
 
             antwoord = query_engine.query(standalone_vraag)
