@@ -7,35 +7,29 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from llama_index.core import VectorStoreIndex, StorageContext
-from llama_index.core import PromptTemplate
-from llama_index.core.retrievers import VectorIndexRetriever
-from llama_index.retrievers.bm25.base import BM25Retriever
-from llama_index.core.retrievers import QueryFusionRetriever
-from llama_index.core.query_engine import RetrieverQueryEngine
-from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
-from llama_index.vector_stores.supabase import SupabaseVectorStore
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.core import Settings
-from llama_index.llms.openai import OpenAI as LlamaOpenAI
-from openai import OpenAI as OpenAIClient
-
-Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
-Settings.llm = LlamaOpenAI(model="gpt-4.1", temperature=0)
-
 st.set_page_config(page_title="RAG Assistent", page_icon="🤖", layout="centered")
 
-# ── Authenticatie via MSAL ────────────────────────────────────────────────────
+
+# ── Helper voor secrets ──────────────────────────────────────────────────────
+def get_secret(key):
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError):
+        return os.getenv(key)
+
+
+# ── Microsoft authenticatie via MSAL ─────────────────────────────────────────
 import msal
 
-CLIENT_ID = os.getenv("AZURE_CLIENT_ID")
-CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")
-TENANT_ID = os.getenv("AZURE_TENANT_ID")
-REDIRECT_URI = os.getenv("AZURE_REDIRECT_URI")
+CLIENT_ID = get_secret("AZURE_CLIENT_ID")
+CLIENT_SECRET = get_secret("AZURE_CLIENT_SECRET")
+TENANT_ID = get_secret("AZURE_TENANT_ID")
+REDIRECT_URI = get_secret("AZURE_REDIRECT_URI")
 AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
 SCOPES = ["User.Read"]
 
 
+@st.cache_resource
 def get_msal_app():
     return msal.ConfidentialClientApplication(
         CLIENT_ID,
@@ -44,15 +38,13 @@ def get_msal_app():
     )
 
 
-# Check of we terug zijn van Microsoft met een auth code
-query_params = st.query_params
-auth_code = query_params.get("code")
+def login_flow():
+    query_params = st.query_params
+    auth_code = query_params.get("code")
 
-if "user" not in st.session_state:
-    if auth_code:
-        # We zijn net terug van Microsoft — wissel code in voor token
-        app = get_msal_app()
-        result = app.acquire_token_by_authorization_code(
+    if auth_code and "user" not in st.session_state:
+        # Wissel auth code in voor token
+        result = get_msal_app().acquire_token_by_authorization_code(
             auth_code,
             scopes=SCOPES,
             redirect_uri=REDIRECT_URI,
@@ -68,20 +60,22 @@ if "user" not in st.session_state:
         else:
             st.error(f"Login mislukt: {result.get('error_description', 'Onbekende fout')}")
             st.stop()
-    else:
-        # Nog niet ingelogd — toon login knop
+
+    if "user" not in st.session_state:
         st.title("📚 RAG Kennissysteem")
         st.write("Meld je aan met je Microsoft account.")
-        app = get_msal_app()
-        auth_url = app.get_authorization_request_url(
+        auth_url = get_msal_app().get_authorization_request_url(
             scopes=SCOPES,
             redirect_uri=REDIRECT_URI,
         )
         st.link_button("Aanmelden met Microsoft", auth_url)
         st.stop()
-# ─────────────────────────────────────────────────────────────────────────────
 
-# ── Phoenix tracing — pas starten NA authenticatie ────────────────────────────
+
+login_flow()
+
+
+# ── Phoenix tracing — pas na authenticatie ───────────────────────────────────
 if "phoenix_initialized" not in st.session_state:
     try:
         from phoenix.otel import register
@@ -91,8 +85,24 @@ if "phoenix_initialized" not in st.session_state:
     except Exception:
         pass
     st.session_state.phoenix_initialized = True
-# ─────────────────────────────────────────────────────────────────────────────
 
+
+# ── LlamaIndex imports & setup ───────────────────────────────────────────────
+from llama_index.core import VectorStoreIndex, StorageContext, Settings, PromptTemplate
+from llama_index.core.retrievers import VectorIndexRetriever, QueryFusionRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
+from llama_index.retrievers.bm25.base import BM25Retriever
+from llama_index.vector_stores.supabase import SupabaseVectorStore
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.llms.openai import OpenAI as LlamaOpenAI
+from openai import OpenAI as OpenAIClient
+
+Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
+Settings.llm = LlamaOpenAI(model="gpt-4.1", temperature=0)
+
+
+# ── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.write(f"👤 {st.session_state.user['name']}")
     st.write(f"✉️ {st.session_state.user['email']}")
@@ -100,27 +110,27 @@ with st.sidebar:
         del st.session_state.user
         st.rerun()
 
+
 st.title("📚 RAG Kennissysteem")
 st.caption("Stel vragen over de beschikbare documentatie")
 
 HISTORY_WINDOW = 6
 
 
-def bouw_geschiedenis_tekst(berichten: list, max_beurten: int = HISTORY_WINDOW) -> str:
+# ── RAG functies ─────────────────────────────────────────────────────────────
+def bouw_geschiedenis_tekst(berichten, max_beurten=HISTORY_WINDOW):
     recente = berichten[-(max_beurten * 2):]
     if not recente:
         return ""
-    regels = []
-    for b in recente:
-        prefix = "Gebruiker" if b["rol"] == "user" else "Assistent"
-        regels.append(f"{prefix}: {b['inhoud']}")
-    return "\n".join(regels)
+    return "\n".join(
+        f"{'Gebruiker' if b['rol'] == 'user' else 'Assistent'}: {b['inhoud']}"
+        for b in recente
+    )
 
 
-def herschrijf_vraag(vraag: str, geschiedenis: str) -> str:
+def herschrijf_vraag(vraag, geschiedenis):
     if not geschiedenis:
         return vraag
-
     client = OpenAIClient()
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
@@ -144,7 +154,7 @@ def herschrijf_vraag(vraag: str, geschiedenis: str) -> str:
     return response.choices[0].message.content.strip()
 
 
-def classificeer_vraag(vraag: str) -> dict:
+def classificeer_vraag(vraag):
     client = OpenAIClient()
     response = client.chat.completions.create(
         model="gpt-4.1-nano",
@@ -168,13 +178,9 @@ def classificeer_vraag(vraag: str) -> dict:
                     'Voorbeeld: {"documenttype": "offerte", "leverancier": "Innomotics", "referentienummer": null}'
                 )
             },
-            {
-                "role": "user",
-                "content": vraag
-            }
+            {"role": "user", "content": vraag}
         ]
     )
-
     try:
         resultaat = json.loads(response.choices[0].message.content.strip())
     except json.JSONDecodeError:
@@ -182,15 +188,12 @@ def classificeer_vraag(vraag: str) -> dict:
 
     if resultaat.get("documenttype") not in ["offerte", "bc_proces", "algemeen"]:
         resultaat["documenttype"] = "algemeen"
-    if "leverancier" not in resultaat:
-        resultaat["leverancier"] = None
-    if "referentienummer" not in resultaat:
-        resultaat["referentienummer"] = None
-
+    resultaat.setdefault("leverancier", None)
+    resultaat.setdefault("referentienummer", None)
     return resultaat
 
 
-def bouw_qa_prompt(geschiedenis: str) -> PromptTemplate:
+def bouw_qa_prompt(geschiedenis):
     geschiedenis_blok = (
         f"Gespreksgeschiedenis (ter context):\n{geschiedenis}\n\n"
         if geschiedenis else ""
@@ -213,8 +216,7 @@ def bouw_qa_prompt(geschiedenis: str) -> PromptTemplate:
 
 @st.cache_resource
 def laad_systeem():
-    db_connection = os.getenv("SUPABASE_DB_URL")
-
+    db_connection = get_secret("SUPABASE_DB_URL")
     vector_store = SupabaseVectorStore(
         postgres_connection_string=db_connection,
         collection_name="documenten"
@@ -224,34 +226,27 @@ def laad_systeem():
         vector_store=vector_store,
         storage_context=storage_context
     )
-
     with open("nodes_cache.pkl", "rb") as f:
         nodes = pickle.load(f)
-
     return index, nodes
 
 
-def bouw_retriever(index, nodes, classificatie: dict) -> QueryFusionRetriever:
+def bouw_retriever(index, nodes, classificatie):
     documenttype = classificatie["documenttype"]
     leverancier = classificatie.get("leverancier")
     referentienummer = classificatie.get("referentienummer")
 
     if documenttype in ["offerte", "bc_proces"]:
         filter_lijst = [ExactMatchFilter(key="documenttype", value=documenttype)]
-
         if leverancier:
             filter_lijst.append(ExactMatchFilter(key="leverancier", value=leverancier))
-
         if referentienummer:
             filter_lijst.append(
                 ExactMatchFilter(key="referentienummer", value=str(referentienummer))
             )
-
         filters = MetadataFilters(filters=filter_lijst)
         vector_retriever = VectorIndexRetriever(
-            index=index,
-            similarity_top_k=5,
-            filters=filters
+            index=index, similarity_top_k=5, filters=filters
         )
 
         gefilterde_nodes = [
@@ -262,23 +257,18 @@ def bouw_retriever(index, nodes, classificatie: dict) -> QueryFusionRetriever:
             and (not referentienummer or
                  str(referentienummer) in str(n.metadata.get("referentienummer", "")))
         ]
-
         if not gefilterde_nodes:
             gefilterde_nodes = [
-                n for n in nodes
-                if n.metadata.get("documenttype") == documenttype
+                n for n in nodes if n.metadata.get("documenttype") == documenttype
             ]
-
         if not gefilterde_nodes:
             gefilterde_nodes = nodes
-
     else:
         vector_retriever = VectorIndexRetriever(index=index, similarity_top_k=5)
         gefilterde_nodes = nodes
 
     bm25_retriever = BM25Retriever.from_defaults(
-        nodes=gefilterde_nodes,
-        similarity_top_k=5
+        nodes=gefilterde_nodes, similarity_top_k=5
     )
 
     return QueryFusionRetriever(
@@ -289,34 +279,27 @@ def bouw_retriever(index, nodes, classificatie: dict) -> QueryFusionRetriever:
     )
 
 
-def bouw_filter_label(classificatie: dict) -> str:
-    documenttype = classificatie["documenttype"]
-    leverancier = classificatie.get("leverancier")
-    referentienummer = classificatie.get("referentienummer")
-
-    label = f"**{documenttype}**"
-    if leverancier:
-        label += f" · leverancier: **{leverancier}**"
-    if referentienummer:
-        label += f" · ref: **{referentienummer}**"
+def bouw_filter_label(classificatie):
+    label = f"**{classificatie['documenttype']}**"
+    if classificatie.get("leverancier"):
+        label += f" · leverancier: **{classificatie['leverancier']}**"
+    if classificatie.get("referentienummer"):
+        label += f" · ref: **{classificatie['referentienummer']}**"
     return label
 
 
+# ── App logica ───────────────────────────────────────────────────────────────
 with st.spinner("Systeem laden..."):
     index, nodes = laad_systeem()
 
 if "berichten" not in st.session_state:
     st.session_state.berichten = []
 
-if "session_id" not in st.session_state:
-    st.session_state.session_id = str(uuid.uuid4())
-
 for bericht in st.session_state.berichten:
     with st.chat_message(bericht["rol"]):
         st.write(bericht["inhoud"])
     if bericht["rol"] == "assistant" and "classificatie" in bericht:
-        label = bouw_filter_label(bericht["classificatie"])
-        st.caption(f"🔍 Gezocht in: {label}")
+        st.caption(f"🔍 Gezocht in: {bouw_filter_label(bericht['classificatie'])}")
 
 vraag = st.chat_input("Stel je vraag...")
 
@@ -331,18 +314,15 @@ if vraag:
             standalone_vraag = herschrijf_vraag(vraag, geschiedenis)
             classificatie = classificeer_vraag(standalone_vraag)
 
-            hybrid_retriever = bouw_retriever(index, nodes, classificatie)
-
-            qa_prompt = bouw_qa_prompt(geschiedenis)
+            retriever = bouw_retriever(index, nodes, classificatie)
             query_engine = RetrieverQueryEngine.from_args(
-                retriever=hybrid_retriever,
-                text_qa_template=qa_prompt
+                retriever=retriever,
+                text_qa_template=bouw_qa_prompt(geschiedenis)
             )
 
             antwoord = query_engine.query(standalone_vraag)
             st.write(str(antwoord))
-            label = bouw_filter_label(classificatie)
-            st.caption(f"🔍 Gezocht in: {label}")
+            st.caption(f"🔍 Gezocht in: {bouw_filter_label(classificatie)}")
 
     st.session_state.berichten.append({
         "rol": "assistant",
