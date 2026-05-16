@@ -34,6 +34,22 @@ Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
 Settings.llm = LlamaOpenAI(model="gpt-4.1", temperature=0)
 
 st.set_page_config(page_title="RAG Assistent", page_icon="🤖", layout="centered")
+
+# ── Authenticatie ─────────────────────────────────────────────────────────────
+if not st.user.is_logged_in:
+    st.title("📚 RAG Kennissysteem")
+    st.write("Meld je aan met je Van Houcke Microsoft account.")
+    if st.button("Aanmelden met Microsoft"):
+        st.login("microsoft")
+    st.stop()
+ 
+# Uitlogknop in sidebar
+with st.sidebar:
+    st.write(f"👤 {st.user.name}")
+    st.write(f"✉️ {st.user.email}")
+    if st.button("Afmelden"):
+        st.logout()
+
 st.title("📚 RAG Kennissysteem")
 st.caption("Stel vragen over de beschikbare documentatie")
 

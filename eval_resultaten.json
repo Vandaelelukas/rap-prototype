@@ -1,0 +1,282 @@
+[
+  {
+    "id": "E01",
+    "categorie": "offerte",
+    "vraag": "Wat kost een Gamma ring NBR_1C?",
+    "verwacht": "22,00 EUR per stuk",
+    "antwoord": "Een Gamma ring + B1 NBR_1C kost 22,00 EUR per stuk.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": "Gamma",
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E02",
+    "categorie": "offerte",
+    "vraag": "Wat is de minimumbestelling bij Innomotics?",
+    "verwacht": "400 EUR per offerte",
+    "antwoord": "Op basis van de beschikbare documentatie gelden de volgende minimumbestellingen bij Innomotics:\n\n1. Voor offerte met referentienummer 5084129 (bestand: 5084129_AA_IPW56_cleaned.txt):\n   - Minimumbestelling: 400 EUR per offerte\n\n2. Voor offerte met referentienummer 5097042 (bestand: 5097042_AA_Hoekcontactlager (BG112-225) (3)_cleaned.txt):\n   - Minimumbestelling: 400 EUR\n\n3. Voor offerte met referentienummer 5132300 (bestand: 5132300_AA 55KW-IE4-225_cleaned.txt):\n   - Minimumbestelling: 1 stuk\n\nSamenvatting:\n- In sommige offertes geldt een minimumbestelling van 400 EUR per offerte.\n- In andere offertes (zoals voor de SD Motor, referentie 5132300) geldt een minimumbestelling van 1 stuk.\n\nDe minimumbestelling is dus afhankelijk van de specifieke offerte en het product.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": "Innomotics",
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E03",
+    "categorie": "offerte",
+    "vraag": "Hoe lang is offerte 5084129 geldig?",
+    "verwacht": "6 maanden na datum van uitgifte",
+    "antwoord": "Offerte 5084129 is 6 maanden geldig na datum van uitgifte.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": "5084129"
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E04",
+    "categorie": "offerte",
+    "vraag": "Wat zijn de incoterms voor de levering van Innomotics?",
+    "verwacht": "CIP Snellegem, inclusief verpakking, exclusief douane en overige kosten, op volle vrachtwagenbasis",
+    "antwoord": "De incoterms voor de levering van Innomotics zijn:\n\n- CIP Snellegem (Incoterms laatste geldende versie), inclusief verpakking, exclusief douane of overige kosten, transport op volle vrachtwagenbasis.\n\nDit geldt voor de verschillende offertes van Innomotics, zoals blijkt uit de beschikbare documentatie. In sommige gevallen wordt ook vermeld dat de levering \"Ex works\" is na technische en commerciële afstemming, maar de standaard incoterm die in de commerciële voorwaarden wordt genoemd is CIP Snellegem volgens de laatste geldende versie van de Incoterms.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": "Innomotics",
+      "referentienummer": null
+    },
+    "score": 0.89,
+    "ok": true
+  },
+  {
+    "id": "E05",
+    "categorie": "offerte",
+    "vraag": "Wat kost het lager 7308 BECBJ SKF?",
+    "verwacht": "42,94 EUR per stuk",
+    "antwoord": "Het lager 7308 BECBJ SKF kost 42,94 EUR per stuk.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E06",
+    "categorie": "offerte",
+    "vraag": "Wat is de prijs van de 55kW IE4 motor?",
+    "verwacht": "2.749,65 EUR",
+    "antwoord": "De prijs van de 55kW IE4 motor (SD Motor Type: 1CV4226B low-voltage motor, artikelnummer 1TZ5504-2BB63-4AA4-Z met opties L19+L25+M11) is 2.749,65 EUR per stuk.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E07",
+    "categorie": "offerte",
+    "vraag": "Wat is het artikelnummer van de 55kW motor?",
+    "verwacht": "1TZ5504-2BB63-4AA4-Z (met opties L19+L25+M11)",
+    "antwoord": "Het artikelnummer van de 55kW motor is: 1TZ5504-2BB63-4AA4-Z (met opties: L19+L25+M11).",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E08",
+    "categorie": "offerte",
+    "vraag": "Wat is de levertijd van de 55kW motor?",
+    "verwacht": "Circa 20 werkdagen",
+    "antwoord": "De levertijd van de 55kW motor (SD Motor Type: 1CV4226B, artikelnummer 1TZ5504-2BB63-4AA4-Z met opties L19+L25+M11) is circa 20 werkdagen.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E09",
+    "categorie": "offerte",
+    "vraag": "Op welke datum werd offerte 5097042 uitgebracht?",
+    "verwacht": "2 juli 2024",
+    "antwoord": "Offerte 5097042 werd uitgebracht op 2.7.2024.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": null,
+      "referentienummer": "5097042"
+    },
+    "score": 0,
+    "ok": false
+  },
+  {
+    "id": "E10",
+    "categorie": "offerte",
+    "vraag": "Zijn deelleveringen mogelijk bij Innomotics?",
+    "verwacht": "Ja, deelleveringen zijn mogelijk",
+    "antwoord": "Ja, deelleveringen zijn mogelijk bij Innomotics.\n\nDit blijkt uit de volgende informatie uit de beschikbare documentatie:\n\n- In het bestand 5132300_AA 55KW-IE4-225_cleaned.txt staat: \"Deelleveringen mogelijk.\"\n- In het bestand 5084129_AA_IPW56_cleaned.txt staat: \"recht op deelleveringen\".\n- In het bestand 5097042_AA_Hoekcontactlager (BG112-225) (3)_cleaned.txt staat: \"gedeeltelijke levering is mogelijk.\"\n\nSamenvattend: Innomotics biedt de mogelijkheid tot deelleveringen bij hun offertes.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": "Innomotics",
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E11",
+    "categorie": "bc_proces",
+    "vraag": "Hoe maak je een nieuwe inkooporder aan in Business Central?",
+    "verwacht": "Zoek naar 'inkooporder' in het zoekvenster, open de lijst van bestaande inkooporders en klik op 'Nieuw'",
+    "antwoord": "Om een nieuwe inkooporder aan te maken in Business Central, volg je deze stappen:\n\n1. Zoek bovenaan in het zoekvenster naar inkooporder. Je komt dan op de lijst van bestaande inkooporders.\n2. Klik op Nieuw om een leeg inkooporder te openen.\n3. Vul de gegevens van de leverancier in. Zodra dit gebeurd is, wordt alle leveranciersinformatie automatisch overgenomen op het inkooporder.\n4. Voeg de artikelen toe die bij deze leverancier besteld moeten worden.\n5. Geef per artikel op hoeveel je wil bestellen.\n6. Vul waar nodig een directe kostprijs exclusief btw in.\n\nDit zijn alle stappen om een nieuwe inkooporder aan te maken in Business Central volgens de beschikbare documentatie.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 0.5,
+    "ok": true
+  },
+  {
+    "id": "E12",
+    "categorie": "bc_proces",
+    "vraag": "Hoe breng je een leverancier op de hoogte van een inkooporder?",
+    "verwacht": "Geef het order vrij en gebruik 'Afdrukken en verzenden' > 'Verzenden e-mail'. Het e-mailvenster opent met de pdf als bijlage.",
+    "antwoord": "Om een leverancier op de hoogte te brengen van een inkooporder in Business Central, volg je deze stappen:\n\n- Geef het inkooporder vrij.\n- Breng vervolgens de leverancier op de hoogte via Afdrukken en verzenden → Verzenden e-mail.\n- Het e-mailvenster opent met de e-mail en de pdf van het inkooporder als bijlage.\n- Zodra de e-mail verzonden is, gaat de orderlijnstatus naar Besteld.\n\nDit zijn alle stappen die in de beschikbare documentatie worden genoemd om de leverancier op de hoogte te brengen van een inkooporder.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 0.44,
+    "ok": true
+  },
+  {
+    "id": "E13",
+    "categorie": "bc_proces",
+    "vraag": "Wat is de orderlijnstatus nadat de e-mail naar de leverancier verzonden is?",
+    "verwacht": "Besteld",
+    "antwoord": "Nadat de e-mail naar de leverancier is verzonden, gaat de orderlijnstatus naar **Besteld**.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E14",
+    "categorie": "bc_proces",
+    "vraag": "Hoe boek je een ontvangst in Business Central?",
+    "verwacht": "Navigeer naar PGR Inkoop Globale Ontvangst, selecteer de inkooporderregels die je wil ontvangen en klik op Boeken",
+    "antwoord": "Om een ontvangst te boeken in Business Central volg je deze stappen:\n\n1. Navigeer naar **PGR Inkoop Globale Ontvangst**.\n2. Selecteer de inkooporderregels die je wilt ontvangen.\n3. Je kunt kiezen voor een volledige of een deelontvangst, afhankelijk van het te ontvangen aantal:\n   - Duid de regels aan die je wilt ontvangen.\n   - Klik op **Boeken**.\n4. Er wordt een pdf gedownload als bevestiging van de ontvangst.\n5. Navigeer je terug naar het inkooporder, dan zie je dat de orderlijnstatus op **Ontvangen** staat en dat er enkel nog een *te factureren aantal* openstaat.\n\nDit zijn alle stappen die in de beschikbare documentatie genoemd worden voor het boeken van een ontvangst in Business Central.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E15",
+    "categorie": "bc_proces",
+    "vraag": "Wat is de orderlijnstatus nadat een toegezegde ontvangstdatum is ingevuld?",
+    "verwacht": "Bevestigd",
+    "antwoord": "Nadat een toegezegde ontvangstdatum is ingevuld, verandert de orderlijnstatus naar **Bevestigd**.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E16",
+    "categorie": "bc_proces",
+    "vraag": "Hoe maak je een assemblageorder aan in Business Central?",
+    "verwacht": "Ga naar Magazijn > Assemblagebeheer > Assemblageorders, klik op Nieuw, selecteer het eindartikel, vul de hoeveelheid in en klik op Vrijgeven",
+    "antwoord": "Om een assemblageorder aan te maken in Business Central volg je deze stappen:\n\n1. Ga naar Magazijn > Assemblagebeheer > Assemblageorders.\n2. Klik op Nieuw om een nieuwe order aan te maken.\n3. Selecteer het eindartikel in het veld Artikelnummer.\n4. Vul de gewenste hoeveelheid in.\n5. Controleer of de componentenlijst correct is geladen.\n6. Stel de verwachte einddatum in.\n7. Klik op Vrijgeven om de order te activeren.\n\nVeelgemaakte fouten bij het aanmaken van een assemblageorder zijn:\n- Vergeten de order vrij te geven waardoor productie niet kan starten.\n- Verkeerde hoeveelheid ingeven waardoor componenten tekort komen.\n- Einddatum niet invullen waardoor planning niet werkt.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 0.62,
+    "ok": true
+  },
+  {
+    "id": "E17",
+    "categorie": "bc_proces",
+    "vraag": "Wat gebeurt er als je een assemblageorder vrijgeeft?",
+    "verwacht": "De status verandert van Open naar Vrijgegeven en het magazijn ontvangt automatisch een picklijst",
+    "antwoord": "Als je een assemblageorder vrijgeeft in Business Central, gebeurt het volgende:\n\n- De status van de assemblageorder verandert van Open naar Vrijgegeven.\n- Magazijnmedewerkers kunnen nu componenten picken; zonder vrijgave is dit niet mogelijk.\n- Het magazijn ontvangt automatisch een picklijst.\n\nLet op: Het is belangrijk om eerst te controleren of alle componenten beschikbaar zijn in het magazijn voordat je de order vrijgeeft. Veelgemaakte fouten zijn het vrijgeven van de order terwijl componenten nog niet op voorraad zijn, of het koppelen van de verkeerde magazijnlocatie aan componenten.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E18",
+    "categorie": "bc_proces",
+    "vraag": "Hoe voeg je een prijs toe aan de inkoopprijslijst vanuit een inkooporder?",
+    "verwacht": "Vul de directe kostprijs exclusief btw in zodat het vinkje 'Add New Price' aangevinkt staat, en klik daarna op 'Adjust Purchase Prices' of geef het order vrij",
+    "antwoord": "Om een prijs toe te voegen aan de inkoopprijslijst vanuit een inkooporder in Business Central, volg je deze stappen:\n\n1. Vul op de inkooporderregel een directe kostprijs exclusief btw in. Zodra je dit doet, wordt het vinkje **Add New Price** automatisch aangevinkt op de regel.\n2. Op dat moment is de prijs nog niet toegevoegd aan de prijslijst. Je kunt de prijs op twee manieren daadwerkelijk toevoegen aan de inkoopprijslijst:\n   - Druk op de knop **Adjust Purchase Prices**.\n   - Geef het inkooporder vrij, waarbij je erop let dat het vinkje **Add New Price** duidelijk aangevinkt staat.\n\nBeide methoden zorgen ervoor dat de prijs wordt toegevoegd aan de inkoopprijslijst.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 0.54,
+    "ok": true
+  },
+  {
+    "id": "E19",
+    "categorie": "anti-hallucinatie",
+    "vraag": "Wat kost een Siemens frequentieregelaar?",
+    "verwacht": "Dit staat niet in de beschikbare documentatie.",
+    "antwoord": "Dit staat niet in de beschikbare documentatie.",
+    "classificatie": {
+      "documenttype": "offerte",
+      "leverancier": "Siemens",
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  },
+  {
+    "id": "E20",
+    "categorie": "anti-hallucinatie",
+    "vraag": "Hoe maak je een verkooporder aan in Business Central?",
+    "verwacht": "Dit staat niet in de beschikbare documentatie.",
+    "antwoord": "Dit staat niet in de beschikbare documentatie.",
+    "classificatie": {
+      "documenttype": "bc_proces",
+      "leverancier": null,
+      "referentienummer": null
+    },
+    "score": 1.0,
+    "ok": true
+  }
+]
