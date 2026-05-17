@@ -25,7 +25,9 @@ CLIENT_ID = get_secret("AZURE_CLIENT_ID")
 CLIENT_SECRET = get_secret("AZURE_CLIENT_SECRET")
 TENANT_ID = get_secret("AZURE_TENANT_ID")
 REDIRECT_URI = get_secret("AZURE_REDIRECT_URI")
-AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
+# Gebruik 'organizations' voor multi-tenant work/school accounts
+# of 'common' voor alle accounts inclusief persoonlijke Microsoft accounts
+AUTHORITY = f"https://login.microsoftonline.com/organizations"
 SCOPES = ["User.Read"]
 
 
@@ -164,18 +166,23 @@ def classificeer_vraag(vraag):
                 "role": "system",
                 "content": (
                     "Analyseer de vraag en geef een JSON-object terug met deze velden:\n\n"
-                    "- documenttype (verplicht): één van deze drie waarden:\n"
-                    "  * 'offerte': vragen over prijzen, artikelnummers, leveranciers, "
-                    "levertijden, minimumbestellingen, incoterms, offertegeldigheid\n"
-                    "  * 'bc_proces': vragen over hoe iets werkt of uitgevoerd wordt in "
-                    "Business Central, stappen, navigatie, knoppen, statussen\n"
-                    "  * 'algemeen': alles wat niet duidelijk in één van bovenstaande past\n\n"
-                    "- leverancier (optioneel): de leveranciersnaam als die expliciet vermeld "
-                    "wordt in de vraag, anders null\n\n"
-                    "- referentienummer (optioneel): het offertereferentienummer als dat "
-                    "expliciet vermeld wordt in de vraag, anders null\n\n"
+                    "- documenttype (verplicht): één van:\n"
+                    "  * offerte: vragen over prijzen, artikelnummers, leveranciers, levertijden, incoterms\n"
+                    "  * bc_proces: vragen over hoe iets werkt in Business Central, stappen, navigatie\n"
+                    "  * algemeen: alles wat niet duidelijk in bovenstaande past\n\n"
+                    "- proces_type (optioneel, alleen invullen bij bc_proces):\n"
+                    "  * inkoop: inkooporders, bestellingen, ontvangst, factureren\n"
+                    "  * assemblage: assemblageorders, componentenlijsten, eindartikelen\n"
+                    "  * verkoop: verkooporders, klantorders, verkoopfacturen\n"
+                    "  * magazijn: picking, picklijsten, locaties, zones\n"
+                    "  * voorraad: voorraadaanpassingen, voorraadtellingen, stock\n"
+                    "  * financieel: grootboek, betalingen, journaalposten\n"
+                    "  * null als het niet duidelijk is welk BC-proces het betreft\n\n"
+                    "- leverancier (optioneel): leveranciersnaam als expliciet vermeld, anders null\n\n"
+                    "- referentienummer (optioneel): offertenummer als expliciet vermeld, anders null\n\n"
                     "Geef ALLEEN een geldig JSON-object terug, geen uitleg of extra tekst.\n"
-                    'Voorbeeld: {"documenttype": "offerte", "leverancier": "Innomotics", "referentienummer": null}'
+                    "Voorbeeld: "
+                    '{"documenttype": "bc_proces", "proces_type": "inkoop", "leverancier": null, "referentienummer": null}'
                 )
             },
             {"role": "user", "content": vraag}
@@ -188,6 +195,11 @@ def classificeer_vraag(vraag):
 
     if resultaat.get("documenttype") not in ["offerte", "bc_proces", "algemeen"]:
         resultaat["documenttype"] = "algemeen"
+
+    geldige_proces_types = ["inkoop", "assemblage", "verkoop", "magazijn", "voorraad", "financieel"]
+    if resultaat.get("proces_type") not in geldige_proces_types:
+        resultaat["proces_type"] = None
+
     resultaat.setdefault("leverancier", None)
     resultaat.setdefault("referentienummer", None)
     return resultaat
@@ -233,17 +245,22 @@ def laad_systeem():
 
 def bouw_retriever(index, nodes, classificatie):
     documenttype = classificatie["documenttype"]
+    proces_type = classificatie.get("proces_type")
     leverancier = classificatie.get("leverancier")
     referentienummer = classificatie.get("referentienummer")
 
     if documenttype in ["offerte", "bc_proces"]:
         filter_lijst = [ExactMatchFilter(key="documenttype", value=documenttype)]
+
+        if proces_type:
+            filter_lijst.append(ExactMatchFilter(key="proces_type", value=proces_type))
         if leverancier:
             filter_lijst.append(ExactMatchFilter(key="leverancier", value=leverancier))
         if referentienummer:
             filter_lijst.append(
                 ExactMatchFilter(key="referentienummer", value=str(referentienummer))
             )
+
         filters = MetadataFilters(filters=filter_lijst)
         vector_retriever = VectorIndexRetriever(
             index=index, similarity_top_k=5, filters=filters
@@ -252,15 +269,18 @@ def bouw_retriever(index, nodes, classificatie):
         gefilterde_nodes = [
             n for n in nodes
             if n.metadata.get("documenttype") == documenttype
+            and (not proces_type or n.metadata.get("proces_type") == proces_type)
             and (not leverancier or leverancier.lower() in
                  str(n.metadata.get("leverancier", "")).lower())
             and (not referentienummer or
                  str(referentienummer) in str(n.metadata.get("referentienummer", "")))
         ]
+        # Fallback 1: zonder optionele filters
         if not gefilterde_nodes:
             gefilterde_nodes = [
                 n for n in nodes if n.metadata.get("documenttype") == documenttype
             ]
+        # Fallback 2: alle nodes
         if not gefilterde_nodes:
             gefilterde_nodes = nodes
     else:
@@ -281,11 +301,15 @@ def bouw_retriever(index, nodes, classificatie):
 
 def bouw_filter_label(classificatie):
     label = f"**{classificatie['documenttype']}**"
+    if classificatie.get("proces_type"):
+        label += f" · proces: **{classificatie['proces_type']}**"
     if classificatie.get("leverancier"):
         label += f" · leverancier: **{classificatie['leverancier']}**"
     if classificatie.get("referentienummer"):
         label += f" · ref: **{classificatie['referentienummer']}**"
     return label
+
+
 
 
 # ── App logica ───────────────────────────────────────────────────────────────
